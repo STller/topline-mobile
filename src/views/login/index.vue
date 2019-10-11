@@ -1,6 +1,8 @@
 <template>
   <div>
-    我是login
+    <van-nav-bar
+      title="标题"
+    />
   </div>
 </template>
 
@@ -11,5 +13,4 @@ export default {
 </script>
 
 <style>
-
 </style>
