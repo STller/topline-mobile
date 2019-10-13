@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import request from '@/utils/request.js' // 引入某一个指定baseURL地址的axios
+import { login } from '@/api/user.js' // 引入封装的接口请求代码
 export default {
   name: 'loginIndex',
   data () {
@@ -35,11 +35,7 @@ export default {
         message: '登录中'
       })
       try {
-        let { data } = await request({
-          method: 'POST',
-          url: 'app/v1_0/authorizations',
-          data: this.user
-        })
+        let { data } = await login(this.user)
         console.log(data)
         toast.clear()
         this.$toast.success({
