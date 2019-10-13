@@ -8,7 +8,9 @@ import {
   NavBar,
   Field,
   CellGroup,
-  Toast
+  Toast,
+  Tabbar,
+  TabbarItem
 } from 'vant'
 // 导入样式后就全局应用了
 import './styles/index.css'
@@ -24,7 +26,14 @@ Vue.component('ValidationObserver', ValidationObserver)
 /**
  * use按需导入的组件
  */
-Vue.use(Button).use(NavBar).use(Field).use(CellGroup).use(Toast)
+Vue
+  .use(Button)
+  .use(NavBar)
+  .use(Field)
+  .use(CellGroup)
+  .use(Toast)
+  .use(Tabbar)
+  .use(TabbarItem)
 /**
  *
  */
