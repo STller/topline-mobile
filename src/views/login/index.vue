@@ -1,12 +1,19 @@
 <template>
   <div>
     <van-nav-bar title="登陆" />
-    <van-cell-group>
-      <van-field v-model="user.mobile" required clearable left-icon placeholder="请输入手机号"></van-field>
-      <van-field v-model="user.code" required clearable left-icon placeholder="请输入验证码">
-        <van-button slot="button" size="small" type="primary">发送验证码</van-button>
-      </van-field>
-    </van-cell-group>
+    <ValidationObserver ref="observer">
+      <van-cell-group>
+        <ValidationProvider vid="field1" v-slot="{errors}">
+          <van-field v-model="user.mobile" required clearable left-icon placeholder="请输入手机号"></van-field>
+        </ValidationProvider>
+        <ValidationProvider vid="field2" v-slot="{ errors }">
+          <van-field v-model="user.code" required clearable left-icon placeholder="请输入验证码">
+            <van-button slot="button" size="small" type="primary">发送验证码</van-button>
+          </van-field>
+          <span id="error2">{{ errors[0] }}</span>
+        </ValidationProvider>
+      </van-cell-group>
+    </ValidationObserver>
     <div class="button-outside">
       <van-button class="button-inside" text="登陆" type="info" @click="onLogin"></van-button>
     </div>
@@ -15,6 +22,10 @@
 
 <script>
 import { login } from '@/api/user.js' // 引入封装的接口请求代码
+/**
+ * 按需导入需要的本地存储API
+ */
+import { setItem } from '@/utils/storage.js'
 export default {
   name: 'loginIndex',
   data () {
@@ -29,6 +40,10 @@ export default {
   },
   methods: {
     async onLogin () {
+      // 表单验证 成功后再往下继续
+      // doSomething
+
+      // toast样式设置
       const toast = this.$toast.loading({
         forbidClick: true, // 禁用背景点击
         loadingType: 'spinner',
@@ -36,6 +51,16 @@ export default {
       })
       try {
         let { data } = await login(this.user)
+        /**
+         * 本地存储token令牌
+         */
+        setItem('token', data.data.token)
+        /**
+         * 容器存储token令牌
+         * 为了防止刷新页面state中的token过期
+         * 转为本地存储token令牌
+         */
+        this.$store.commit('setToken', data.data.token)
         console.log(data)
         toast.clear()
         this.$toast.success({
