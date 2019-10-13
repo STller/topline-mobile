@@ -3,10 +3,10 @@ import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
 // 按需导入需要的组件
-import { Button, NavBar } from 'vant'
+import { Button, NavBar, Field, CellGroup, Toast } from 'vant'
 // 导入样式后就全局应用了
 import './styles/index.css'
-Vue.use(Button).use(NavBar)
+Vue.use(Button).use(NavBar).use(Field).use(CellGroup).use(Toast)
 
 Vue.config.productionTip = false
 

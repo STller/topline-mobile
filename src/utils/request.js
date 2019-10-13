@@ -11,7 +11,7 @@ const request = axios.create({
 
 // 解决大数问题
 request.defaults.transformResponse = [function (data) {
-  return data ? jsonBig.parse(data) : ''
+  return data ? jsonBig.parse(data) : {}
 }]
 
 export default request
