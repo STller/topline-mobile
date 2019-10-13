@@ -9,6 +9,10 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
+      path: '/',
+      redirect: '/login'
+    },
+    {
       name: 'tabbar',
       path: '/tabbar',
       component: Tabbar,

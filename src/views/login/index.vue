@@ -1,16 +1,15 @@
 <template>
   <div>
     <van-nav-bar title="登陆" />
-    <ValidationObserver ref="observer">
+    <ValidationObserver ref="loginForm">
       <van-cell-group>
-        <ValidationProvider vid="field1" v-slot="{errors}">
-          <van-field v-model="user.mobile" required clearable left-icon placeholder="请输入手机号"></van-field>
+        <ValidationProvider name="手机号" rules="required|phone" v-slot="{errors}">
+          <van-field :error-message="errors[0]" label="手机号" v-model="user.mobile" required clearable left-icon placeholder="请输入手机号"></van-field>
         </ValidationProvider>
-        <ValidationProvider vid="field2" v-slot="{ errors }">
-          <van-field v-model="user.code" required clearable left-icon placeholder="请输入验证码">
+        <ValidationProvider name="验证码" rules="required|max:6" v-slot="{ errors }">
+          <van-field label="验证码" :error-message="errors[0]" v-model="user.code" required clearable left-icon placeholder="请输入验证码">
             <van-button slot="button" size="small" type="primary">发送验证码</van-button>
           </van-field>
-          <span id="error2">{{ errors[0] }}</span>
         </ValidationProvider>
       </van-cell-group>
     </ValidationObserver>
@@ -41,8 +40,10 @@ export default {
   methods: {
     async onLogin () {
       // 表单验证 成功后再往下继续
-      // doSomething
-
+      const isValid = await this.$refs.loginForm.validate()
+      if (!isValid) {
+        return
+      }
       // toast样式设置
       const toast = this.$toast.loading({
         forbidClick: true, // 禁用背景点击
