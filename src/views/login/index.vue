@@ -68,6 +68,7 @@ export default {
           duration: 2000,
           message: '登录成功'
         })
+        this.$router.push('/tabbar/home')
       } catch (error) {
         if (error.response && error.response.status === 400) {
           this.$toast.fail('登陆失败，手机号或验证码错误')
