@@ -14,7 +14,8 @@ import {
   Tabs,
   Tab,
   List,
-  Cell
+  Cell,
+  PullRefresh
 } from 'vant'
 // 导入样式后就全局应用了
 import './styles/index.css'
@@ -58,6 +59,7 @@ Vue
   .use(Tab)
   .use(List)
   .use(Cell)
+  .use(PullRefresh)
 /**
  *
  */

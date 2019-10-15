@@ -6,14 +6,17 @@
     <van-tabs v-model="active">
       <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
         <!-- 文章列表 -->
-        <van-list
-          v-model="channel.loading"
-          :finished="channel.finished"
-          finished-text="没有更多了"
-          @load="onLoad"
-        >
-          <van-cell v-for="item in channel.articles" :key="item" :title="item"></van-cell>
-        </van-list>
+        <!-- 下拉刷新组件 -->
+        <van-pull-refresh v-model="channel.isPullDownLoading" @refresh="onRefresh">
+          <van-list
+            v-model="channel.loading"
+            :finished="channel.finished"
+            finished-text="没有更多了"
+            @load="onLoad"
+          >
+            <van-cell v-for="item in channel.articles" :key="item" :title="item.title"></van-cell>
+          </van-list>
+        </van-pull-refresh>
       </van-tab>
     </van-tabs>
   </div>
@@ -24,6 +27,7 @@
  * 获取默认推荐的频道列表
  */
 import { getDefaultChannels } from '@/api/channel'
+import { getArticles } from '@/api/articles'
 export default {
   name: 'HomeIndex',
   data () {
@@ -54,19 +58,35 @@ export default {
       // 当前激活的频道对象
       const activeChannel = this.channels[this.active]
       /**
-       * 请求获取对象
+       * 请求获取文章数据
        */
-      await setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          activeChannel.articles.push(activeChannel.articles.length + 1)
-        }
-        // 加载状态结束
-        activeChannel.loading = false
-        // 数据全部加载完成
-        if (activeChannel.articles.length >= 40) {
-          activeChannel.finished = true
-        }
-      }, 500)
+      const { data } = await getArticles({
+        channel_id: activeChannel.id, // 频道ID
+        timestamp: activeChannel.timestamp || Date.now(), // 将当前的时间戳传送，没有的话就传当前的时间
+        with_top: 1
+      })
+      // 返回的文章保存到当前频道中
+      activeChannel.articles.push(...data.data.results)
+      // 结束刷新行为
+      activeChannel.loading = false
+      // 返回的数据中还有时间戳的话
+      if (data.data.pre_timestamp) {
+        activeChannel.timestamp = data.data.pre_timestamp
+      } else {
+        // 返回的数据中没有时间戳了，代表后边没有数据了
+        activeChannel.finished = true
+      }
+      // await setTimeout(() => {
+      //   for (let i = 0; i < 10; i++) {
+      //     activeChannel.articles.push(activeChannel.articles.length + 1)
+      //   }
+      //   // 加载状态结束
+      //   activeChannel.loading = false
+      //   // 数据全部加载完成
+      //   if (activeChannel.articles.length >= 40) {
+      //     activeChannel.finished = true
+      //   }
+      // }, 500)
       // console.log(activeChannel, this.channels)
     },
     /**
@@ -82,9 +102,27 @@ export default {
         channel['articles'] = [] // 存储频道的文章列表
         channel['finished'] = false // 存储频道的加载结束状态
         channel['loading'] = false // 存储频道的加载更多的loading状态
+        channel['timestamp'] = null // 存储频道下一页的时间戳
+        channel['isPullDownLoading'] = false // 存储频道的下拉刷新状态
       })
       // 返回的默认频道列表赋予data中的channels
       this.channels = channels
+    },
+    /**
+     * 下拉刷新处理函数
+     */
+    async onRefresh () {
+      // 获取当前激活的频道对象
+      const activeChannel = this.channels[this.active]
+      // 请求获取最新推荐的频道列表
+      const { data } = await getArticles({
+        channel_id: activeChannel.id,
+        timestamp: activeChannel.Date.now(), // 下拉刷新永远在获取最新的文章列表，所以传最新时间戳
+        with_top: 1
+      })
+      activeChannel.articles.unshift(...data.data.results) // 将最新获取的文章添加到文章的顶部
+      activeChannel.isPullDownLoading = false // 关闭下拉刷新的loading状态
+      this.$toast('刷新成功')
     }
   },
   created () {
