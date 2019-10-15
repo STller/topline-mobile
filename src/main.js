@@ -10,7 +10,11 @@ import {
   CellGroup,
   Toast,
   Tabbar,
-  TabbarItem
+  TabbarItem,
+  Tabs,
+  Tab,
+  List,
+  Cell
 } from 'vant'
 // 导入样式后就全局应用了
 import './styles/index.css'
@@ -50,6 +54,10 @@ Vue
   .use(Toast)
   .use(Tabbar)
   .use(TabbarItem)
+  .use(Tabs)
+  .use(Tab)
+  .use(List)
+  .use(Cell)
 /**
  *
  */

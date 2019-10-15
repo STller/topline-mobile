@@ -9,16 +9,13 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
-      redirect: '/login'
-    },
-    {
       name: 'tabbar',
-      path: '/tabbar',
+      path: '/',
       component: Tabbar,
       children: [
         {
-          path: 'home',
+          name: 'home',
+          path: '', // 默认子路由
           component: Home
         }
       ]

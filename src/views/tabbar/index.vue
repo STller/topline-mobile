@@ -13,6 +13,7 @@
 
 <script>
 export default {
+  name: 'TabbarIndex',
   data () {
     return {
       active: 0
