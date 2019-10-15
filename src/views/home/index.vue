@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- 导航栏 -->
-    <van-nav-bar title="首页"></van-nav-bar>
+    <van-nav-bar title="首页" fixed></van-nav-bar>
     <!-- 频道列表 -->
     <van-tabs v-model="active">
       <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
@@ -151,6 +151,19 @@ export default {
 
 <style lang="less" scoped>
 .home {
+  .van-tabs {
+    /deep/ .van-tabs__content {
+      margin-bottom: 50px;
+      margin-top: 90px;
+    }
+    /deep/ .van-tabs__wrap {
+      position: fixed;
+      top: 46px;
+      z-index: 2;
+      left: 0;
+      right: 0;
+    }
+  }
   .article-info {
     display: flex;
     align-items: center;
