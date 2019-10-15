@@ -25,9 +25,9 @@
                 </van-grid>
                 <div class="article-info">
                   <div class="meta">
-                    <span>{{item.aut_name}}</span>
-                    <span>{{item.comm_count}}</span>
-                    <span>{{item.pubdate}}</span>
+                    <span>用户：{{item.aut_name}}</span>
+                    <span>评论数：{{item.comm_count}}</span>
+                    <span>创建时间：{{item.pubdate|relativeTime}}</span>
                   </div>
                 </div>
               </div>
@@ -150,14 +150,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// .home {
-//   .article-info {
-//     display: flex;
-//     align-items: center;
-//     justify-content: space-between;
-//     .meta span {
-//       margin-right: 10px;
-//     }
-//   }
-// }
+.home {
+  .article-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .meta span {
+      margin-right: 10px;
+    }
+  }
+}
 </style>

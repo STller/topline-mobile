@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
+import '@/utils/date'
 // 按需导入需要的组件
 import {
   Button,
