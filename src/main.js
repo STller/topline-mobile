@@ -19,7 +19,8 @@ import {
   Grid,
   Image,
   Icon,
-  GridItem
+  GridItem,
+  Lazyload
 } from 'vant'
 // 导入样式后就全局应用了
 import './styles/index.css'
@@ -68,6 +69,7 @@ Vue
   .use(Image)
   .use(Icon)
   .use(GridItem)
+  .use(Lazyload)
 /**
  *
  */

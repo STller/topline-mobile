@@ -20,7 +20,7 @@
                 <!-- <div :slot="title"><p>{{item.title}}</p></div> -->
                 <van-grid :border="false" :column-num="3">
                   <van-grid-item v-for="(img,index) in item.cover.images" :key="index">
-                    <van-image height="80" :src="img"></van-image>
+                    <van-image lazy-load height="80" :src="img"></van-image>
                   </van-grid-item>
                 </van-grid>
                 <div class="article-info">
