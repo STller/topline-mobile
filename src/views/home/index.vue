@@ -15,9 +15,9 @@
             @load="onLoad"
           >
             <!-- 每一行的文章内容 -->
-            <van-cell v-for="(item,index) in channel.articles" :key="index" :title="item.a">
-              <div class="label">
-                <div :slot="title"><p>{{item.title}}</p></div>
+            <van-cell v-for="(item,index) in channel.articles" :key="index" :title="item.title">
+              <div slot="label">
+                <!-- <div :slot="title"><p>{{item.title}}</p></div> -->
                 <van-grid :border="false" :column-num="3">
                   <van-grid-item v-for="(img,index) in item.cover.images" :key="index">
                     <van-image height="80" :src="img"></van-image>
