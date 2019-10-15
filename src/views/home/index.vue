@@ -14,7 +14,24 @@
             finished-text="没有更多了"
             @load="onLoad"
           >
-            <van-cell v-for="item in channel.articles" :key="item" :title="item.title"></van-cell>
+            <!-- 每一行的文章内容 -->
+            <van-cell v-for="(item,index) in channel.articles" :key="index" :title="item.a">
+              <div class="label">
+                <div :slot="title"><p>{{item.title}}</p></div>
+                <van-grid :border="false" :column-num="3">
+                  <van-grid-item v-for="(img,index) in item.cover.images" :key="index">
+                    <van-image height="80" :src="img"></van-image>
+                  </van-grid-item>
+                </van-grid>
+                <div class="article-info">
+                  <div class="meta">
+                    <span>{{item.aut_name}}</span>
+                    <span>{{item.comm_count}}</span>
+                    <span>{{item.pubdate}}</span>
+                  </div>
+                </div>
+              </div>
+            </van-cell>
           </van-list>
         </van-pull-refresh>
       </van-tab>
@@ -132,5 +149,15 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+// .home {
+//   .article-info {
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     .meta span {
+//       margin-right: 10px;
+//     }
+//   }
+// }
 </style>
