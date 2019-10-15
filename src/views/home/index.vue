@@ -117,7 +117,7 @@ export default {
       // 请求获取最新推荐的频道列表
       const { data } = await getArticles({
         channel_id: activeChannel.id,
-        timestamp: activeChannel.Date.now(), // 下拉刷新永远在获取最新的文章列表，所以传最新时间戳
+        timestamp: Date.now(), // 下拉刷新永远在获取最新的文章列表，所以传最新时间戳
         with_top: 1
       })
       activeChannel.articles.unshift(...data.data.results) // 将最新获取的文章添加到文章的顶部
