@@ -16,11 +16,22 @@
           <van-button type="danger" size="mini">编辑</van-button>
         </van-cell>
         <van-grid :gutter="10">
-          <van-grid-item v-for="(item,index) in channels" :key="index" :text="item.name"></van-grid-item>
+          <van-grid-item
+            v-for="(item,index) in channels"
+            :key="index"
+            :text="item.name"
+          >
+        </van-grid-item>
         </van-grid>
         <van-cell title="推荐频道" :border="false"></van-cell>
         <van-grid :gutter="10">
-          <van-grid-item v-for="(value,index) in recommendChannels" :key="index" :text="value.name"></van-grid-item>
+          <van-grid-item
+            v-for="(value,index) in recommendChannels"
+            :key="index"
+            :text="value.name"
+            @click="onAddChannel(value)"
+            >
+          </van-grid-item>
         </van-grid>
       </div>
     </van-popup>
@@ -30,7 +41,11 @@
       <div slot="nav-right" class="wap-nav" @click="isChannelEditShow = true">
         <van-icon name="wap-nav" size="20px"></van-icon>
       </div>
-      <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
+      <van-tab
+        v-for="channel in channels"
+        :title="channel.name"
+        :key="channel.id"
+      >
         <!-- 文章列表 -->
         <!-- 下拉刷新组件 -->
         <van-pull-refresh v-model="channel.isPullDownLoading" @refresh="onRefresh">
@@ -41,7 +56,11 @@
             @load="onLoad"
           >
             <!-- 每一行的文章内容 -->
-            <van-cell v-for="(item,index) in channel.articles" :key="index" :title="item.title">
+            <van-cell
+              v-for="(item,index) in channel.articles"
+              :key="index"
+              :title="item.title"
+            >
               <div slot="label">
                 <!-- <div :slot="title"><p>{{item.title}}</p></div> -->
                 <van-grid :border="false" :column-num="3">
@@ -67,7 +86,7 @@
 
 <script>
 /**
- * 获取默认推荐的频道列表 获取所有频道
+ * 获取默认推荐的频道列表||获取所有频道
  */
 import { getDefaultChannels, getAllChannels } from '@/api/channel'
 /**
@@ -91,6 +110,7 @@ export default {
   computed: {
     /**
      * 获取推荐频道列表
+     * 定义的名字就是新的data数据
      */
     recommendChannels () {
       // 定义的推荐频道数据
@@ -196,10 +216,18 @@ export default {
     async loadAllChannels () {
       const { data } = await getAllChannels()
       this.allChannels = data.data.channels
+    },
+    /**
+     * 点击推荐频道添加到我的频道
+     */
+    onAddChannel (value) {
+      this.channels.push(value)
     }
   },
+  /**
+   * 页面刷新获取我的频道与所有频道
+   */
   created () {
-    // 页面刷新调用频道获取
     this.loadChannels()
     this.loadAllChannels()
   }
