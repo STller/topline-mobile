@@ -89,6 +89,7 @@
  * 获取默认推荐的频道列表||获取所有频道
  */
 import { getDefaultChannels, getAllChannels } from '@/api/channel'
+import { setItem, getItem } from '@/utils/storage'
 /**
  * 获取文章列表
  */
@@ -132,9 +133,12 @@ export default {
     // active: function (newValue) {
     //   // console.log(newValue)
     // },
-    // channels: function (newValue) {
-    //   console.log(newValue)
-    // }
+    /**
+     * 一旦我的频道数据改变 就实现数据本地化
+     */
+    channels (newValue) {
+      setItem('channels', newValue)
+    }
   },
   methods: {
     /**
@@ -179,9 +183,18 @@ export default {
      * 获取频道列表
      */
     async loadChannels () {
-      // data 解构赋值 为异步请求的返回值
-      const { data } = await getDefaultChannels()
-      const channels = data.data.channels
+      // 先从本地读取存储的频道列表 不管有没有
+      let channels = []
+      let localChannels = getItem('channels')
+      if (localChannels) {
+        // 如果本地有 直接取用本地的
+        channels = localChannels
+      } else {
+        // 如果本地没有的话 转而发送请求 请求数据
+        // data 解构赋值 为异步请求的返回值
+        const { data } = await getDefaultChannels()
+        channels = data.data.channels
+      }
       // console.log(data)
       channels.forEach(channel => {
         /** 为每个频道添加独立的存储属性 */
@@ -218,7 +231,7 @@ export default {
       this.allChannels = data.data.channels
     },
     /**
-     * 点击推荐频道添加到我的频道
+     * 点击推荐频道向我的频道 添加频道
      */
     onAddChannel (value) {
       this.channels.push(value)
