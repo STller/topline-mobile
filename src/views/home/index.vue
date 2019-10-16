@@ -2,11 +2,33 @@
   <div class="home">
     <!-- 导航栏 -->
     <van-nav-bar title="首页" fixed></van-nav-bar>
+    <!-- 弹窗组件 -->
+    <van-popup
+      v-model="isChannelEditShow"
+      position="bottom"
+      :style="{height:'95%'}"
+      round
+      closeable
+      close-icon-position="top-left"
+    >
+      <div class="channel-container">
+        <van-cell title="我的频道" :border="false">
+          <van-button type="danger" size="mini">编辑</van-button>
+        </van-cell>
+        <van-grid :gutter="10">
+          <van-grid-item v-for="value in 8" :key="value" text="文字"></van-grid-item>
+        </van-grid>
+        <van-cell title="推荐频道" :border="false"></van-cell>
+        <van-grid :gutter="10">
+          <van-grid-item v-for="value in 8" :key="value" text="文字"></van-grid-item>
+        </van-grid>
+      </div>
+    </van-popup>
     <!-- 频道列表 -->
     <van-tabs v-model="active">
-      <!-- 面包按钮 -->
+      <!-- 面包按钮通过van-tabs的nav-right插槽插入 -->
       <div slot="nav-right" class="wap-nav" @click="isChannelEditShow = true">
-        <van-icon class=""></van-icon>
+        <van-icon name="wap-nav" size="20px"></van-icon>
       </div>
       <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
         <!-- 文章列表 -->
@@ -40,10 +62,6 @@
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
-    <!-- 弹窗组件 -->
-    <van-popup v-model="isChannelEditShow" position="bottom" :style="{height:'95%'}" round="">
-
-    </van-popup>
   </div>
 </template>
 
@@ -160,7 +178,11 @@ export default {
 
 <style lang="less" scoped>
 .home {
+  .channel-container{
+    padding-top: 30px;
+  }
   .van-tabs {
+    display: relative;
     /deep/ .van-tabs__content {
       margin-bottom: 50px;
       margin-top: 90px;
@@ -171,6 +193,18 @@ export default {
       z-index: 2;
       left: 0;
       right: 0;
+    }
+    .wap-nav {
+      position: absolute;
+      right: 0;
+      top: 14px;
+      display: flex;
+      // align-items: center;
+      background-color: #fff;
+      opacity: 0.8;
+    }
+    .van-tab {
+      // width: 200px;
     }
   }
   .article-info {
