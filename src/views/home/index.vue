@@ -8,7 +8,7 @@
       position="bottom"
       :style="{height:'95%'}"
       round
-      closeable
+      :closeable="true"
       close-icon-position="top-left"
     >
       <div class="channel-container">
@@ -182,7 +182,6 @@ export default {
     padding-top: 30px;
   }
   .van-tabs {
-    display: relative;
     /deep/ .van-tabs__content {
       margin-bottom: 50px;
       margin-top: 90px;
@@ -195,16 +194,12 @@ export default {
       right: 0;
     }
     .wap-nav {
-      position: absolute;
+      position: sticky;
       right: 0;
-      top: 14px;
       display: flex;
-      // align-items: center;
+      align-items: center;
       background-color: #fff;
       opacity: 0.8;
-    }
-    .van-tab {
-      // width: 200px;
     }
   }
   .article-info {

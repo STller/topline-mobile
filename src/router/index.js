@@ -10,7 +10,7 @@ export default new Router({
   routes: [
     {
       name: 'tabbar',
-      path: '/',
+      path: '',
       component: Tabbar,
       children: [
         {
