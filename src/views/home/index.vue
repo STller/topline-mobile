@@ -16,11 +16,11 @@
           <van-button type="danger" size="mini">编辑</van-button>
         </van-cell>
         <van-grid :gutter="10">
-          <van-grid-item v-for="value in 8" :key="value" text="文字"></van-grid-item>
+          <van-grid-item v-for="(item,index) in channels" :key="index" :text="item.name"></van-grid-item>
         </van-grid>
         <van-cell title="推荐频道" :border="false"></van-cell>
         <van-grid :gutter="10">
-          <van-grid-item v-for="value in 8" :key="value" text="文字"></van-grid-item>
+          <van-grid-item v-for="(value,index) in recommendChannels" :key="index" :text="value.name"></van-grid-item>
         </van-grid>
       </div>
     </van-popup>
@@ -67,9 +67,12 @@
 
 <script>
 /**
- * 获取默认推荐的频道列表
+ * 获取默认推荐的频道列表 获取所有频道
  */
-import { getDefaultChannels } from '@/api/channel'
+import { getDefaultChannels, getAllChannels } from '@/api/channel'
+/**
+ * 获取文章列表
+ */
 import { getArticles } from '@/api/articles'
 export default {
   name: 'HomeIndex',
@@ -80,19 +83,38 @@ export default {
       // loading: false,
       // finished: false,
       channels: [],
-      isChannelEditShow: false
+      isChannelEditShow: false,
+      allChannels: []
+      // recommendChannels: []
+    }
+  },
+  computed: {
+    /**
+     * 获取推荐频道列表
+     */
+    recommendChannels () {
+      // 定义的推荐频道数据
+      const arr = []
+      this.allChannels.forEach((channel) => {
+        const result = this.channels.find((item) => item.id === channel.id)
+        // 总频道数据中找不到我的数据中的频道 就把数据压入推荐频道中去
+        if (!result) {
+          arr.push(channel)
+        }
+      })
+      return arr
     }
   },
   watch: {
     /**
      * 监听active的数据变化
      */
-    active: function (newValue) {
-      // console.log(newValue)
-    },
-    channels: function (newValue) {
-      console.log(newValue)
-    }
+    // active: function (newValue) {
+    //   // console.log(newValue)
+    // },
+    // channels: function (newValue) {
+    //   console.log(newValue)
+    // }
   },
   methods: {
     /**
@@ -167,11 +189,19 @@ export default {
       activeChannel.articles.unshift(...data.data.results) // 将最新获取的文章添加到文章的顶部
       activeChannel.isPullDownLoading = false // 关闭下拉刷新的loading状态
       this.$toast('刷新成功')
+    },
+    /**
+     * 获取所有频道
+     */
+    async loadAllChannels () {
+      const { data } = await getAllChannels()
+      this.allChannels = data.data.channels
     }
   },
   created () {
     // 页面刷新调用频道获取
     this.loadChannels()
+    this.loadAllChannels()
   }
 }
 </script>

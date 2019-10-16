@@ -12,3 +12,12 @@ export function getDefaultChannels () {
     method: 'GET'
   })
 }
+/**
+ * 获取所有频道
+ */
+export function getAllChannels () {
+  return request({
+    url: '/app/v1_0/channels',
+    method: 'GET'
+  })
+}
