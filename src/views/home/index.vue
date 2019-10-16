@@ -4,6 +4,10 @@
     <van-nav-bar title="首页" fixed></van-nav-bar>
     <!-- 频道列表 -->
     <van-tabs v-model="active">
+      <!-- 面包按钮 -->
+      <div slot="nav-right" class="wap-nav" @click="isChannelEditShow = true">
+        <van-icon class=""></van-icon>
+      </div>
       <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
         <!-- 文章列表 -->
         <!-- 下拉刷新组件 -->
@@ -36,6 +40,10 @@
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
+    <!-- 弹窗组件 -->
+    <van-popup v-model="isChannelEditShow" position="bottom" :style="{height:'95%'}" round="">
+
+    </van-popup>
   </div>
 </template>
 
@@ -53,7 +61,8 @@ export default {
       list: [],
       // loading: false,
       // finished: false,
-      channels: []
+      channels: [],
+      isChannelEditShow: false
     }
   },
   watch: {

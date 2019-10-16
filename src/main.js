@@ -21,7 +21,8 @@ import {
   Image,
   Icon,
   GridItem,
-  Lazyload
+  Lazyload,
+  Popup
 } from 'vant'
 // 导入样式后就全局应用了
 import './styles/index.css'
@@ -71,6 +72,7 @@ Vue
   .use(Icon)
   .use(GridItem)
   .use(Lazyload)
+  .use(Popup)
 /**
  *
  */
