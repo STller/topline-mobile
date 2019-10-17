@@ -24,6 +24,7 @@
             v-for="(item,index) in channels"
             :key="index"
             :text="item.name"
+            @click="onMyChannelClick(index)"
           >
           <van-icon v-show="isEditShow" class="close-icon" slot="icon" name="close"></van-icon>
         </van-grid-item>
@@ -103,11 +104,14 @@ export default {
   name: 'HomeIndex',
   data () {
     return {
+      // 当前激活的频道
       active: 0,
-      list: [],
+      // list: [],
       // loading: false,
       // finished: false,
+      // 我的频道列表
       channels: [],
+      // 频道弹窗显示标志
       isChannelEditShow: false,
       allChannels: [],
       isEditShow: false
@@ -244,6 +248,21 @@ export default {
      */
     onAddChannel (value) {
       this.channels.push(value)
+    },
+    /**
+     * 我的频道点击事件
+     * 分为编辑模式与非编辑模式点击
+     * 编辑模式下点击为删除 非编辑模式点击为进入该频道
+     */
+    onMyChannelClick (index) {
+      if (this.isEditShow) {
+        // index表示从哪个开始删除 1表示删除几个
+        this.channels.splice(index, 1)
+      } else {
+        // 切换到当前激活的频道
+        this.active = index
+        this.isChannelEditShow = false
+      }
     }
   },
   /**
