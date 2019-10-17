@@ -13,7 +13,10 @@
     <!-- /搜索框 -->
     <!-- 联想建议 -->
       <!-- van-cell-group可以为van-cell提供上下外边框 -->
-      <van-cell v-for="(item,index) in searchSuggestions" :title="item" :key="index" icon="search"></van-cell>
+      <van-cell v-for="(item,index) in searchSuggestions" :title="item" :key="index" icon="search">
+        <!-- 运用van-cell title插槽高亮显示关键字 -->
+        <div v-html="highLight(item)" slot="title"></div>
+      </van-cell>
     <!-- /联想建议 -->
   </div>
 </template>
@@ -41,6 +44,10 @@ export default {
         })
         this.searchSuggestions = data.data.options
       }
+    },
+    highLight (str) {
+      const reg = new RegExp(this.searchText, 'g')
+      return str.replace(reg, '<span style="color:red">' + this.searchText + '</span>')
     }
   }
 
