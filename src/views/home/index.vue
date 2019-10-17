@@ -13,7 +13,11 @@
     >
       <div class="channel-container">
         <van-cell title="我的频道" :border="false">
-          <van-button type="danger" size="mini">编辑</van-button>
+          <van-button
+            type="danger"
+            size="mini"
+            @click="isEditShow = !isEditShow"
+            >{{ isEditShow ? '完成' : '编辑' }}</van-button>
         </van-cell>
         <van-grid :gutter="10">
           <van-grid-item
@@ -21,6 +25,7 @@
             :key="index"
             :text="item.name"
           >
+          <van-icon v-show="isEditShow" class="close-icon" slot="icon" name="close"></van-icon>
         </van-grid-item>
         </van-grid>
         <van-cell title="推荐频道" :border="false"></van-cell>
@@ -104,7 +109,8 @@ export default {
       // finished: false,
       channels: [],
       isChannelEditShow: false,
-      allChannels: []
+      allChannels: [],
+      isEditShow: false
       // recommendChannels: []
     }
   },
@@ -136,8 +142,8 @@ export default {
     /**
      * 一旦我的频道数据改变 就实现数据本地化
      */
-    channels (newValue) {
-      setItem('channels', newValue)
+    channels (newVal) {
+      setItem('channels', newVal)
     }
   },
   methods: {
@@ -189,6 +195,7 @@ export default {
       if (localChannels) {
         // 如果本地有 直接取用本地的
         channels = localChannels
+        console.log(channels)
       } else {
         // 如果本地没有的话 转而发送请求 请求数据
         // data 解构赋值 为异步请求的返回值
@@ -196,7 +203,9 @@ export default {
         channels = data.data.channels
       }
       // console.log(data)
-      channels.forEach(channel => {
+      // const { data } = await getDefaultChannels()
+      // const channels = data.data.channels
+      channels.forEach((channel) => {
         /** 为每个频道添加独立的存储属性 */
         channel['articles'] = [] // 存储频道的文章列表
         channel['finished'] = false // 存储频道的加载结束状态
@@ -240,7 +249,7 @@ export default {
   /**
    * 页面刷新获取我的频道与所有频道
    */
-  created () {
+  mounted () {
     this.loadChannels()
     this.loadAllChannels()
   }
@@ -251,6 +260,11 @@ export default {
 .home {
   .channel-container{
     padding-top: 30px;
+    .close-icon{
+      position: absolute;
+      top:-5px;
+      right: -5px;
+    }
   }
   .van-tabs {
     /deep/ .van-tabs__content {
