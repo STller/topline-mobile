@@ -6,14 +6,20 @@
       placeholder="请输入搜索关键字"
       show-action
       shape="round"
-      @search="onSearch"
+      @search="onSearch(searchText)"
+      @input="onSearchInput"
     >
-    <div slot="action" @click="onSearch">搜索</div>
+    <div slot="action" @click="onSearch(searchText)">搜索</div>
     </van-search>
     <!-- /搜索框 -->
     <!-- 联想建议 -->
       <!-- van-cell-group可以为van-cell提供上下外边框 -->
-      <van-cell v-for="(item,index) in searchSuggestions" :title="item" :key="index" icon="search">
+      <van-cell
+        v-for="(item,index) in searchSuggestions"
+        :title="item"
+        :key="index"
+        icon="search"
+        @click="onSearch(item)">
         <!-- 运用van-cell title插槽高亮显示关键字 -->
         <div v-html="highLight(item)" slot="title"></div>
       </van-cell>
@@ -34,10 +40,18 @@ export default {
     }
   },
   methods: {
-    async onSearch () {
+    /**
+     * 点击搜索
+     */
+    onSearch (data) {
+      this.$router.push(`/search/${data}`)
+    },
+    /**
+     * 搜索内容发生改变即搜索
+     */
+    async onSearchInput () {
       const searchText = this.searchText.trim()
       if (!searchText) {
-
       } else {
         const { data } = await getSearchSuggestions({
           q: this.searchText
@@ -45,6 +59,9 @@ export default {
         this.searchSuggestions = data.data.options
       }
     },
+    /**
+     * 搜索联想列表中 搜索关键字高亮显示
+     */
     highLight (str) {
       const reg = new RegExp(this.searchText, 'g')
       return str.replace(reg, '<span style="color:red">' + this.searchText + '</span>')
