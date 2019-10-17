@@ -13,23 +13,34 @@
     <!-- /搜索框 -->
     <!-- 联想建议 -->
       <!-- van-cell-group可以为van-cell提供上下外边框 -->
-      <van-cell title="单元格" icon="search"></van-cell>
-      <van-cell title="单元格" icon="search"></van-cell>
+      <van-cell v-for="(item,index) in searchSuggestions" :title="item" :key="index" icon="search"></van-cell>
     <!-- /联想建议 -->
   </div>
 </template>
 
 <script>
+import { getSearchSuggestions } from '@/api/search.js'
 export default {
   name: 'SearchIndex',
   data () {
     return {
-      searchText: ''
+      // 搜索关键字
+      searchText: '',
+      // 根据搜索关键字返回的搜索联想建议列表
+      searchSuggestions: []
     }
   },
   methods: {
-    onSearch () {
-      console.log('onsearch')
+    async onSearch () {
+      const searchText = this.searchText.trim()
+      if (!searchText) {
+
+      } else {
+        const { data } = await getSearchSuggestions({
+          q: this.searchText
+        })
+        this.searchSuggestions = data.data.options
+      }
     }
   }
 
