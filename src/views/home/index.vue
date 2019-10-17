@@ -1,7 +1,18 @@
 <template>
   <div class="home">
     <!-- 导航栏 -->
-    <van-nav-bar title="首页" fixed></van-nav-bar>
+    <van-nav-bar class="nav-bar" title="首页" fixed>
+      <van-button
+        class="search-btn"
+        slot="title"
+        round
+        type="info"
+        size="small"
+        text="搜索"
+        @click="$router.push('/search')"
+      ></van-button>
+    </van-nav-bar>
+    <!-- /导航栏 -->
     <!-- 弹窗组件 -->
     <van-popup
       v-model="isChannelEditShow"
@@ -17,7 +28,7 @@
             type="danger"
             size="mini"
             @click="isEditShow = !isEditShow"
-            >{{ isEditShow ? '完成' : '编辑' }}</van-button>
+          >{{ isEditShow ? '完成' : '编辑' }}</van-button>
         </van-cell>
         <van-grid :gutter="10">
           <van-grid-item
@@ -26,8 +37,8 @@
             :text="item.name"
             @click="onMyChannelClick(index)"
           >
-          <van-icon v-show="isEditShow" class="close-icon" slot="icon" name="close"></van-icon>
-        </van-grid-item>
+            <van-icon v-show="isEditShow" class="close-icon" slot="icon" name="close"></van-icon>
+          </van-grid-item>
         </van-grid>
         <van-cell title="推荐频道" :border="false"></van-cell>
         <van-grid :gutter="10">
@@ -36,8 +47,7 @@
             :key="index"
             :text="value.name"
             @click="onAddChannel(value)"
-            >
-          </van-grid-item>
+          ></van-grid-item>
         </van-grid>
       </div>
     </van-popup>
@@ -47,11 +57,7 @@
       <div slot="nav-right" class="wap-nav" @click="isChannelEditShow = true">
         <van-icon name="wap-nav" size="20px"></van-icon>
       </div>
-      <van-tab
-        v-for="channel in channels"
-        :title="channel.name"
-        :key="channel.id"
-      >
+      <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
         <!-- 文章列表 -->
         <!-- 下拉刷新组件 -->
         <van-pull-refresh v-model="channel.isPullDownLoading" @refresh="onRefresh">
@@ -62,11 +68,7 @@
             @load="onLoad"
           >
             <!-- 每一行的文章内容 -->
-            <van-cell
-              v-for="(item,index) in channel.articles"
-              :key="index"
-              :title="item.title"
-            >
+            <van-cell v-for="(item,index) in channel.articles" :key="index" :title="item.title">
               <div slot="label">
                 <!-- <div :slot="title"><p>{{item.title}}</p></div> -->
                 <van-grid :border="false" :column-num="3">
@@ -126,8 +128,8 @@ export default {
     recommendChannels () {
       // 定义的推荐频道数据
       const arr = []
-      this.allChannels.forEach((channel) => {
-        const result = this.channels.find((item) => item.id === channel.id)
+      this.allChannels.forEach(channel => {
+        const result = this.channels.find(item => item.id === channel.id)
         // 总频道数据中找不到我的数据中的频道 就把数据压入推荐频道中去
         if (!result) {
           arr.push(channel)
@@ -209,7 +211,7 @@ export default {
       // console.log(data)
       // const { data } = await getDefaultChannels()
       // const channels = data.data.channels
-      channels.forEach((channel) => {
+      channels.forEach(channel => {
         /** 为每个频道添加独立的存储属性 */
         channel['articles'] = [] // 存储频道的文章列表
         channel['finished'] = false // 存储频道的加载结束状态
@@ -277,11 +279,15 @@ export default {
 
 <style lang="less" scoped>
 .home {
-  .channel-container{
+  .nav-bar .search-btn{
+    margin-top: 8px;
+    width: 100%;
+  }
+  .channel-container {
     padding-top: 30px;
-    .close-icon{
+    .close-icon {
       position: absolute;
-      top:-5px;
+      top: -5px;
       right: -5px;
     }
   }

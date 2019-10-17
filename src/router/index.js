@@ -3,13 +3,13 @@ import Router from 'vue-router'
 import Login from '@/views/login/index.vue'
 import Tabbar from '@/views/tabbar/index.vue'
 import Home from '@/views/home/index.vue'
+import Search from '@/views/search/index.vue'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      name: 'tabbar',
       path: '',
       component: Tabbar,
       children: [
@@ -25,6 +25,11 @@ export default new Router({
       path: '/login',
       component: Login
       // component: () => import('@/views/login/index.vue')
+    },
+    {
+      name: 'search',
+      path: '/search',
+      component: Search
     }
   ]
 })
