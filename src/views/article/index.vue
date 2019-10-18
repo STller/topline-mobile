@@ -10,11 +10,11 @@
     <!-- /导航栏 -->
 
     <!-- 加载中 loading -->
-    <van-loading class="article-loading" />
+    <van-loading class="article-loading" v-if="loading"/>
     <!-- /加载中 loading -->
 
     <!-- 文章详情 -->
-    <div class="detail">
+    <div class="detail" v-else-if="article.title">
       <h3 class="title">{{article.title}}</h3>
       <div class="author">
         <van-image round width="2rem" height="2rem" fit="fill" :src="article.aut_photo" />
@@ -39,7 +39,7 @@
     <!-- /文章详情 -->
 
     <!-- 加载失败的消息提示 -->
-    <div class="error">
+    <div class="error" v-else>
       <p>网络超时，点击 <a href="#" @click.prevent="loadArticle">刷新</a> 试一试。</p>
     </div>
     <!-- /加载失败的消息提示 -->
@@ -52,7 +52,7 @@ export default {
   name: 'ArticleIndex',
   data () {
     return {
-      loading: true, // 控制加载中的 loading 状态
+      loading: false, // 控制加载中的 loading 状态
       article: { // 文章详情
         title: 'hello world',
         content: '<p>hello hello</p>',
@@ -67,8 +67,17 @@ export default {
      * 获取单个文章
      */
     async loadArticle () {
-      const { data } = await getArticle(this.$route.params.articleId)
-      this.article = data.data
+      // 开启loading显示
+      this.loading = true
+      // 捕捉异步获取中出的错误
+      try {
+        const { data } = await getArticle(this.$route.params.articleId)
+        this.article = data.data
+      } catch (error) {
+        console.log(error)
+      }
+      // 无论加载成功还是失败 loading都要结束
+      this.loading = false
     }
   },
   created () {
