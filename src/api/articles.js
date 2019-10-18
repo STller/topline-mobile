@@ -24,3 +24,24 @@ export function getArticle (articleId) {
     url: `/app/v1_0/articles/${articleId}`
   })
 }
+/**
+ * 点赞
+ */
+export function addLike (articleId) {
+  return request({
+    method: 'post',
+    url: '/app/v1_0/article/likings',
+    data: {
+      target: articleId
+    }
+  })
+}
+/**
+ * 取消点赞
+ */
+export function deleteLike (articleId) {
+  return request({
+    method: 'delete',
+    url: `/app/v1_0/article/likings/${articleId}`
+  })
+}
