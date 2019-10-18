@@ -26,11 +26,12 @@
     <!-- /联想建议 -->
     <!-- 搜索历史记录 -->
     <van-cell-group>
-      <van-cell v-for="(item,index) in searchHistories" :key="index" :title="item">
+      <van-cell title="历史记录">
         <span>全部删除</span>
         <span>完成</span>
         <van-icon name="delete"></van-icon>
       </van-cell>
+      <van-cell v-for="(item,index) in searchHistories" :key="index" :title="item"></van-cell>
     </van-cell-group>
     <!-- /搜索历史记录 -->
   </div>
