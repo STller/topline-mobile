@@ -14,3 +14,13 @@ export function getArticles (params) {
     params
   })
 }
+/**
+ * 获取单个文章的详情
+ * @param {要查询的文章ID} articleId
+ */
+export function getArticle (articleId) {
+  return request({
+    method: 'get',
+    url: `/app/v1_0/articles/${articleId}`
+  })
+}

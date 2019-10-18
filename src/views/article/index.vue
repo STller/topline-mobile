@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { getArticle } from '@/api/articles'
 export default {
   name: 'ArticleIndex',
   data () {
@@ -60,6 +61,21 @@ export default {
         aut_photo: 'http://toutiao.meiduo.site/FsyeQUotMscq-vji-2ZDiXrc44k5'
       }
     }
+  },
+  methods: {
+    /**
+     * 获取单个文章
+     */
+    async loadArticle () {
+      const { data } = await getArticle(this.$route.params.articleId)
+      this.article = data.data
+    }
+  },
+  created () {
+    /**
+     * 调用获取文章的方法
+     */
+    this.loadArticle()
   }
 }
 </script>
