@@ -47,7 +47,8 @@
             hairline
             type="danger"
             plain
-            icon="delete">不喜欢</van-button>
+            icon="delete"
+            @click="onDislike">{{article.attitude === 0?'取消不喜欢':'不喜欢'}}</van-button>
       </div>
     </div>
     <!-- /文章详情 -->
@@ -61,7 +62,7 @@
 </template>
 
 <script>
-import { getArticle, addLike, deleteLike } from '@/api/articles'
+import { getArticle, addLike, deleteLike, addDislike, deleteDislike } from '@/api/articles'
 export default {
   name: 'ArticleIndex',
   data () {
@@ -115,6 +116,21 @@ export default {
         // 否则点赞
         await addLike(articleId)
         this.article.attitude = 1
+      }
+    },
+    /**
+     * 不喜欢/取消不喜欢
+     */
+    async onDislike () {
+      const articleId = this.article.art_id.toString()
+      // 如果是不喜欢状态 则取消不喜欢
+      if (this.article.attitude === 0) {
+        await deleteDislike(articleId)
+        this.article.attitude = -1
+      } else {
+        // 否则 不喜欢
+        await addDislike(articleId)
+        this.article.attitude = 0
       }
     }
   },
