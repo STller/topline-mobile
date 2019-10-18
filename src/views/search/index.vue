@@ -6,31 +6,42 @@
       placeholder="请输入搜索关键字"
       show-action
       shape="round"
-
       @input="onSearchInput"
     >
-    <div slot="action" @click="onSearch(searchText)">搜索</div>
+      <div slot="action" @click="onSearch(searchText)">搜索</div>
     </van-search>
     <!-- /搜索框 -->
     <!-- 联想建议 -->
-      <!-- van-cell-group可以为van-cell提供上下外边框 -->
+    <!-- van-cell-group可以为van-cell提供上下外边框 -->
+    <van-cell-group v-if="searchText">
       <van-cell
         v-for="(item,index) in searchSuggestions"
         :title="item"
         :key="index"
         icon="search"
-        @click="onSearch(item)">
+        @click="onSearch(item)"
+      >
         <!-- 运用van-cell title插槽高亮显示关键字 -->
         <div v-html="highLight(item)" slot="title"></div>
       </van-cell>
+    </van-cell-group>
     <!-- /联想建议 -->
     <!-- 搜索历史记录 -->
-    <van-cell-group>
+    <van-cell-group v-else>
       <van-cell v-if="isHistoryShow" @click="onDeleteAllSearch" title="历史记录">
         <span>全部删除</span>
       </van-cell>
-      <van-cell @click="onSearch(item)" v-for="(item,index) in searchHistories" :key="index" :title="item">
-        <van-icon @click.stop="onDeleteSingleSearch(index)" style="vertical-align:middle" name="delete"></van-icon>
+      <van-cell
+        @click="onSearch(item)"
+        v-for="(item,index) in searchHistories"
+        :key="index"
+        :title="item"
+      >
+        <van-icon
+          @click.stop="onDeleteSingleSearch(index)"
+          style="vertical-align:middle"
+          name="delete"
+        ></van-icon>
       </van-cell>
     </van-cell-group>
     <!-- /搜索历史记录 -->
@@ -99,7 +110,10 @@ export default {
      */
     highLight (str) {
       const reg = new RegExp(this.searchText, 'g')
-      return str.replace(reg, '<span style="color:red">' + this.searchText + '</span>')
+      return str.replace(
+        reg,
+        '<span style="color:red">' + this.searchText + '</span>'
+      )
     },
     /**
      * 删除全部的历史记录
@@ -116,10 +130,8 @@ export default {
       setItem('search-histories', this.searchHistories)
     }
   }
-
 }
 </script>
 
 <style>
-
 </style>
