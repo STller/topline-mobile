@@ -6,7 +6,7 @@
       placeholder="请输入搜索关键字"
       show-action
       shape="round"
-      @search="onSearch(searchText)"
+
       @input="onSearchInput"
     >
     <div slot="action" @click="onSearch(searchText)">搜索</div>
@@ -24,11 +24,24 @@
         <div v-html="highLight(item)" slot="title"></div>
       </van-cell>
     <!-- /联想建议 -->
+    <!-- 搜索历史记录 -->
+    <van-cell-group>
+      <van-cell v-for="(item,index) in searchHistories" :key="index" :title="item">
+        <span>全部删除</span>
+        <span>完成</span>
+        <van-icon name="delete"></van-icon>
+      </van-cell>
+    </van-cell-group>
+    <!-- /搜索历史记录 -->
   </div>
 </template>
 
 <script>
-import { getSearchSuggestions } from '@/api/search.js'
+import { getSearchSuggestions } from '@/api/search'
+/**
+ * 导入本地化存储相关组件
+ */
+import { getItem, setItem } from '@/utils/storage'
 export default {
   name: 'SearchIndex',
   data () {
@@ -36,7 +49,9 @@ export default {
       // 搜索关键字
       searchText: '',
       // 根据搜索关键字返回的搜索联想建议列表
-      searchSuggestions: []
+      searchSuggestions: [],
+      // 获取本地存储的搜索历史记录
+      searchHistories: getItem('search-histories')
     }
   },
   methods: {
@@ -44,6 +59,16 @@ export default {
      * 点击搜索
      */
     onSearch (data) {
+      // 检测本地的历史记录中是否存在当前的搜索关键字
+      this.searchHistories = this.searchHistories ? this.searchHistories : []
+      const isSearchResultExist = this.searchHistories.indexOf(data)
+      if (isSearchResultExist !== -1) {
+        // 本地存在该搜索历史记录 调用splice删除
+        this.searchHistories.splice(isSearchResultExist, 1)
+      }
+      // 删除之后将最新的搜索关键字保存在历史记录中
+      this.searchHistories.unshift(data)
+      setItem('search-histories', this.searchHistories)
       this.$router.push(`/search/${data}`)
     },
     /**
