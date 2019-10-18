@@ -26,12 +26,12 @@
     <!-- /联想建议 -->
     <!-- 搜索历史记录 -->
     <van-cell-group>
-      <van-cell title="历史记录">
+      <van-cell v-if="isHistoryShow" @click="onDeleteAllSearch" title="历史记录">
         <span>全部删除</span>
-        <span>完成</span>
-        <van-icon name="delete"></van-icon>
       </van-cell>
-      <van-cell @click="onSearch(item)" v-for="(item,index) in searchHistories" :key="index" :title="item"></van-cell>
+      <van-cell @click="onSearch(item)" v-for="(item,index) in searchHistories" :key="index" :title="item">
+        <van-icon @click.stop="onDeleteSingleSearch(index)" style="vertical-align:middle" name="delete"></van-icon>
+      </van-cell>
     </van-cell-group>
     <!-- /搜索历史记录 -->
   </div>
@@ -53,6 +53,15 @@ export default {
       searchSuggestions: [],
       // 获取本地存储的搜索历史记录
       searchHistories: getItem('search-histories')
+      // isHistoryShow: false
+    }
+  },
+  computed: {
+    /**
+     * 通过计算属性控制历史记录栏的显示与隐藏
+     */
+    isHistoryShow () {
+      return this.searchHistories.length !== 0
     }
   },
   methods: {
@@ -91,6 +100,20 @@ export default {
     highLight (str) {
       const reg = new RegExp(this.searchText, 'g')
       return str.replace(reg, '<span style="color:red">' + this.searchText + '</span>')
+    },
+    /**
+     * 删除全部的历史记录
+     */
+    onDeleteAllSearch () {
+      this.searchHistories = []
+      setItem('search-histories', this.searchHistories)
+    },
+    /**
+     * 删除单行历史记录
+     */
+    onDeleteSingleSearch (index) {
+      this.searchHistories.splice(index, 1)
+      setItem('search-histories', this.searchHistories)
     }
   }
 
