@@ -23,7 +23,8 @@ import {
   GridItem,
   Lazyload,
   Popup,
-  Search
+  Search,
+  Loading
 } from 'vant'
 // 导入样式后就全局应用了
 import './styles/index.css'
@@ -75,6 +76,7 @@ Vue
   .use(Lazyload)
   .use(Popup)
   .use(Search)
+  .use(Loading)
 /**
  *
  */

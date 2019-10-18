@@ -5,6 +5,7 @@ import Tabbar from '@/views/tabbar/index.vue'
 import Home from '@/views/home/index.vue'
 import Search from '@/views/search/index.vue'
 import SearchResult from '@/views/search-result/index.vue'
+import Article from '@/views/article/index.vue'
 
 Vue.use(Router)
 
@@ -36,6 +37,11 @@ export default new Router({
       name: 'search-result',
       path: '/search/:q',
       component: SearchResult
+    },
+    {
+      name: 'article',
+      path: '/article/:articleId',
+      component: Article
     }
   ]
 })

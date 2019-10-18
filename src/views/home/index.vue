@@ -68,7 +68,16 @@
             @load="onLoad"
           >
             <!-- 每一行的文章内容 -->
-            <van-cell v-for="(item,index) in channel.articles" :key="index" :title="item.title">
+            <van-cell
+              v-for="(item,index) in channel.articles"
+              :key="index"
+              :title="item.title"
+              @click="$router.push({
+                name:'article', // name是router里定义的路由名字
+                params:{
+                  articleId:item.art_id.toString()
+                }
+              })">
               <div slot="label">
                 <!-- <div :slot="title"><p>{{item.title}}</p></div> -->
                 <van-grid :border="false" :column-num="3">
