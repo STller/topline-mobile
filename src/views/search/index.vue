@@ -54,6 +54,11 @@ import { getSearchSuggestions } from '@/api/search'
  * 导入本地化存储相关组件
  */
 import { getItem, setItem } from '@/utils/storage'
+/**
+ * 导入lodash函数库
+ * 引入debounce函数防抖
+ */
+import { debounce } from 'lodash'
 export default {
   name: 'SearchIndex',
   data () {
@@ -94,8 +99,9 @@ export default {
     },
     /**
      * 搜索内容发生改变即搜索
+     * 引入debounce防抖 当停止输入300毫秒后再执行事件
      */
-    async onSearchInput () {
+    onSearchInput: debounce(async function () {
       const searchText = this.searchText.trim()
       if (!searchText) {
       } else {
@@ -104,7 +110,7 @@ export default {
         })
         this.searchSuggestions = data.data.options
       }
-    },
+    }, 300),
     /**
      * 搜索联想列表中 搜索关键字高亮显示
      */
