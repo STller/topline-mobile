@@ -31,7 +31,7 @@
         <span>完成</span>
         <van-icon name="delete"></van-icon>
       </van-cell>
-      <van-cell v-for="(item,index) in searchHistories" :key="index" :title="item"></van-cell>
+      <van-cell @click="onSearch(item)" v-for="(item,index) in searchHistories" :key="index" :title="item"></van-cell>
     </van-cell-group>
     <!-- /搜索历史记录 -->
   </div>
