@@ -26,7 +26,8 @@
           round
           size="small"
           type="info"
-        >+ 关注</van-button>
+          @click="onFollow"
+        >{{article.is_followed?'取消关注':'+ 关注'}}</van-button>
       </div>
       <!-- 利用了v-html的组件 -->
       <div class="content" v-html="article.content"></div>
@@ -58,7 +59,8 @@ export default {
         content: '<p>hello hello</p>',
         aut_name: 'LPZ',
         pubdate: '4天前',
-        aut_photo: 'http://toutiao.meiduo.site/FsyeQUotMscq-vji-2ZDiXrc44k5'
+        aut_photo: 'http://toutiao.meiduo.site/FsyeQUotMscq-vji-2ZDiXrc44k5',
+        is_followed: false
       }
     }
   },
@@ -78,6 +80,13 @@ export default {
       }
       // 无论加载成功还是失败 loading都要结束
       this.loading = false
+    },
+    /**
+     * 关注或取消关注
+     */
+    onFollow () {
+      // 对is_followed做取反处理
+      this.article.is_followed = ~this.article.is_followed
     }
   },
   created () {
