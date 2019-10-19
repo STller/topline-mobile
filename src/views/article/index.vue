@@ -58,11 +58,16 @@
       <p>网络超时，点击 <a href="#" @click.prevent="loadArticle">刷新</a> 试一试。</p>
     </div>
     <!-- /加载失败的消息提示 -->
+
+    <!-- 文章评论 -->
+    <ArticleComment/>
+    <!-- /文章评论 -->
   </div>
 </template>
 
 <script>
 import { getArticle, addLike, deleteLike, addDislike, deleteDislike } from '@/api/articles'
+import ArticleComment from './components/article-comment'
 export default {
   name: 'ArticleIndex',
   data () {
@@ -78,6 +83,9 @@ export default {
         attitude: ''
       }
     }
+  },
+  components: {
+    ArticleComment
   },
   methods: {
     /**
