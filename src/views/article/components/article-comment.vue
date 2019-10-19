@@ -28,8 +28,13 @@
     <!-- /评论列表 -->
     <!-- 发布评论 -->
     <van-cell-group class="publish-wrap">
-      <van-field clearable placeholder="请输入评论内容">
-        <van-button slot="button" size="mini" type="info">发布</van-button>
+      <van-field v-model="commentText" clearable placeholder="请输入评论内容">
+        <van-button
+            slot="button"
+            size="mini"
+            type="info"
+            @click="onAddComment(commentText)"
+            >发布</van-button>
       </van-field>
     </van-cell-group>
     <!-- /发布评论 -->
@@ -37,7 +42,7 @@
 </template>
 
 <script>
-import { getComments } from '@/api/comment'
+import { getComments, addComment } from '@/api/comment'
 export default {
   name: 'ArticleComment',
   props: {},
@@ -47,10 +52,14 @@ export default {
       loading: false, // 上拉加载更多的 loading
       finished: false, // 上拉加载是否结束
       offset: null, // 获取下一页数据的页码，第一页就是null
-      limit: 10 // 每页大小
+      limit: 10, // 每页大小
+      commentText: '' // 评论内容
     }
   },
   methods: {
+    /**
+     * 加载评论
+     */
     async onLoad () {
       const { data } = await getComments({
         type: 'a', // ‘a’对文章的评论 ‘c’对评论的回复
@@ -68,6 +77,24 @@ export default {
         // 如果后面没有数据了
         this.finished = true
       }
+    },
+    /**
+     * 发表评论
+     */
+    async onAddComment () {
+      // 获取评论内容
+      const commentText = this.commentText.trim()
+      if (!commentText) {
+        return
+      }
+      const { data } = await addComment({
+        target: this.$route.params.articleId, // 评论的目标ID
+        content: commentText // 评论内容
+      })
+      // 将最新添加的评论数据放在顶部展示
+      this.list.unshift(data.data.new_obj)
+      // 评论输入框清空
+      this.commentText = ''
     }
   }
 }
