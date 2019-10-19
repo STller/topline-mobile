@@ -22,7 +22,10 @@
             <van-button size="mini" type="default">{{item.reply_count}}</van-button>
           </p>
         </div>
-        <van-icon slot="right-icon" name="like-o"></van-icon>
+        <van-icon
+            slot="right-icon"
+            :name="item.is_liking?'like':'like-o'"
+            @click="onCommentLike(item)"></van-icon>
       </van-cell>
     </van-list>
     <!-- /评论列表 -->
@@ -42,7 +45,7 @@
 </template>
 
 <script>
-import { getComments, addComment } from '@/api/comment'
+import { getComments, addComment, addCommentLike, deleteCommentLike } from '@/api/comment'
 export default {
   name: 'ArticleComment',
   props: {},
@@ -95,6 +98,21 @@ export default {
       this.list.unshift(data.data.new_obj)
       // 评论输入框清空
       this.commentText = ''
+    },
+    /**
+     * 评论点赞或取消点赞
+     */
+    async onCommentLike (comment) {
+      const commentId = comment.com_id.toString()
+      if (comment.is_liking) {
+        // 已赞 则取消点赞
+        await deleteCommentLike(commentId)
+      } else {
+        // 未赞 添加点赞
+        await addCommentLike(commentId)
+      }
+      // 反转点赞的状态
+      comment.is_liking = !comment.is_liking
     }
   }
 }

@@ -20,7 +20,7 @@
         <van-image round width="2rem" height="2rem" fit="fill" :src="article.aut_photo" />
         <div class="text">
           <p class="name">{{article.aut_name}}</p>
-          <p class="time">{{article.pubdate}}</p>
+          <p class="time">{{article.pubdate|relativeTime}}</p>
         </div>
         <van-button
           round
