@@ -32,3 +32,12 @@ export function unFollowUser (userId) {
     url: `/app/v1_0/user/followings/${userId}`
   })
 }
+/**
+ * 获取用户的个人信息
+ */
+export function getSelf (userId) {
+  return request({
+    method: 'get',
+    url: '/app/v1_0/user'
+  })
+}

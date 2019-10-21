@@ -3,7 +3,7 @@
       <!-- 用户信息 -->
       <van-cell-group
         class="user-info"
-        v-if="$store.state.user">
+        v-if="$store.state.user.length != 0">
         <van-cell
             class="base-info"
             is-link
@@ -23,15 +23,15 @@
                     <span class="text">头条</span>
                 </van-grid-item>
                 <van-grid-item>
-                    <span class="count">{{user.art_count}}</span>
+                    <span class="count">{{user.follow_count}}</span>
                     <span class="text">关注</span>
                 </van-grid-item>
                 <van-grid-item>
-                    <span class="count">{{user.art_count}}</span>
+                    <span class="count">{{user.fans_count}}</span>
                     <span class="text">粉丝</span>
                 </van-grid-item>
                 <van-grid-item>
-                    <span class="count">{{user.art_count}}</span>
+                    <span class="count">{{user.like_count}}</span>
                     <span class="text">获赞</span>
                 </van-grid-item>
                 </van-grid>
@@ -49,7 +49,7 @@
     </div>
     <!-- /未登录 -->
     <!-- 用户信息 -->
-    <van-cell-group class="user-info">
+    <!-- <van-cell-group class="user-info">
         <van-cell
             class="base-info"
             is-link
@@ -80,7 +80,7 @@
                     <span class="text">获赞</span>
                 </van-grid-item>
                 </van-grid>
-    </van-cell-group>
+    </van-cell-group> -->
     <!-- /用户信息 -->
     <!-- 其他 -->
     <van-grid clickable>
@@ -108,11 +108,25 @@
 </template>
 
 <script>
+import { getSelf } from '../../api/user'
 export default {
   name: 'MyIndex',
   data () {
     return {
       user: {} // 用户信息对象
+    }
+  },
+  created () {
+    this.loadSelf()
+  },
+  methods: {
+    /**
+     *  获取用户的信息
+     */
+    async loadSelf () {
+      const { data } = await getSelf()
+      this.user = data.data
+      this.$store.commit('setUser', this.user)
     }
   }
 }
