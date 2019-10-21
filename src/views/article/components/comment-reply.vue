@@ -2,7 +2,10 @@
   <div class="comment-reply">
     <!-- 导航栏 -->
     <van-nav-bar :title="comment.reply_count+'条回复'">
-      <van-icon slot="left" name="cross"></van-icon>
+      <van-icon
+        slot="left"
+        name="cross"
+        @click="$emit('close')"></van-icon>
     </van-nav-bar>
     <!-- /导航栏 -->
     <!-- 当前评论 -->
@@ -36,12 +39,11 @@
           style="margin-right:10px"
           :src="item.aut_photo"
         ></van-image>
-        <span style="color:#466b9d" slot="title">{{itme.aut_name}}</span>
+        <span style="color:#466b9d" slot="title">{{item.aut_name}}</span>
         <div slot="label">
           <p style="color:#363636">{{item.content}}</p>
           <p>
             <span style="margin-top:10px">{{item.pubdate|relativeTime}}</span>
-            <van-button size="mini" type="default">回复{{item.reply_count}}</van-button>
           </p>
         </div>
         <van-icon
@@ -55,7 +57,7 @@
     <!-- 发布回复 -->
     <van-cell-group class="publish-wrap">
       <van-field v-model="commentText" clearable placeholder="请输入评论内容">
-        <van-button slot="button" size="mini" type="info" @click="onAddComment"></van-button>
+        <van-button text="发布回复" slot="button" size="mini" type="info" @click="onAddComment"></van-button>
       </van-field>
     </van-cell-group>
     <!-- /发布回复 -->
@@ -82,12 +84,13 @@ export default {
      */
     async onLoad () {
       const { data } = await getComments({
-        type: 'c',
-        source: this.$route.params.artilceId,
+        type: 'c', // c-对评论的回复
+        source: this.comment.com_id.toString(),
         offset: this.offset
       })
+      // console.log(this.comment.com_id.toString())
       this.list.push(...data.data.results)
-      this.laoding = false
+      this.loading = false
       if (data.data.results.length) {
         this.offset = data.data.last_id
       } else {
@@ -103,11 +106,13 @@ export default {
         return
       }
       const { data } = await addComment({
-        target: this.$route.params.artilceId,
-        content: commentText
+        target: this.comment.com_id.toString(), // 当前评论的ID
+        content: commentText,
+        art_id: this.$route.params.articleId // 对评论内容发表回复时需要传递文章ID 仅对文章进行评论不必添加此参数
       })
       this.list.unshift(data.data.new_obj)
       this.commentText = ''
+      this.comment.reply_count++
     },
     /**
      * 评论点赞/取消评论点赞

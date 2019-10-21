@@ -52,7 +52,8 @@
         round
         position="bottom"
         style="height:90%">
-    <CommentReply :comment="currentComment"/>
+    <!-- v-if解决弹层首次弹出后 再次弹出不重新渲染的问题 -->
+    <CommentReply @close="isReplyShow = false" v-if="isReplyShow" :comment="currentComment"/>
     </van-popup>
     <!-- /评论回复 -->
   </div>
@@ -89,6 +90,7 @@ export default {
         source: this.$route.params.articleId,
         offset: this.offset // 表示从此id的数据向后取 不传表示从第一页开始读取数据
       })
+      console.log(data)
       // 将返回的评论数据压入list中
       this.list.push(...data.data.results)
       // 结束本次的loading
