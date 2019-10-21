@@ -19,7 +19,12 @@
           <p style="color:#363636">{{item.content}}</p>
           <p>
             <span style="margin-right:10px">{{item.pubdate|relativeTime}}</span>
-            <van-button size="mini" type="default">{{item.reply_count}}</van-button>
+            <van-button
+                size="mini"
+                type="default"
+                @click="onReplyShow(item)">
+                回复{{item.reply_count}}
+            </van-button>
           </p>
         </div>
         <van-icon
@@ -41,14 +46,27 @@
       </van-field>
     </van-cell-group>
     <!-- /发布评论 -->
+    <!-- 评论回复 -->
+    <van-popup
+        v-model="isReplyShow"
+        round
+        position="bottom"
+        style="height:90%">
+    <CommentReply :comment="currentComment"/>
+    </van-popup>
+    <!-- /评论回复 -->
   </div>
 </template>
 
 <script>
 import { getComments, addComment, addCommentLike, deleteCommentLike } from '@/api/comment'
+import CommentReply from '@/views/article/components/comment-reply'
 export default {
   name: 'ArticleComment',
   props: {},
+  components: {
+    CommentReply
+  },
   data () {
     return {
       list: [], // 评论列表
@@ -56,7 +74,9 @@ export default {
       finished: false, // 上拉加载是否结束
       offset: null, // 获取下一页数据的页码，第一页就是null
       limit: 10, // 每页大小
-      commentText: '' // 评论内容
+      commentText: '', // 评论内容
+      isReplyShow: false, // 控制评论弹窗弹出或隐藏
+      currentComment: {} // 查看回复的当前评论
     }
   },
   methods: {
@@ -113,6 +133,13 @@ export default {
       }
       // 反转点赞的状态
       comment.is_liking = !comment.is_liking
+    },
+    /**
+     * 控制回复评论的弹窗
+     */
+    onReplyShow (item) {
+      this.currentComment = item
+      this.isReplyShow = true
     }
   }
 }
