@@ -1,8 +1,45 @@
 <template>
   <div class="my">
+      <!-- 用户信息 -->
+      <van-cell-group
+        class="user-info"
+        v-if="$store.state.user">
+        <van-cell
+            class="base-info"
+            is-link
+            :border="false"
+            @click="$router.push('/user')">
+            <div slot="title">
+                <img class="avatar" :src="user.photo">
+                <span class="title">{{user.name}}</span>
+            </div>
+            </van-cell>
+            <van-grid
+                class="data-info"
+                :border="false"
+                >
+                <van-grid-item>
+                    <span class="count">{{user.art_count}}</span>
+                    <span class="text">头条</span>
+                </van-grid-item>
+                <van-grid-item>
+                    <span class="count">{{user.art_count}}</span>
+                    <span class="text">关注</span>
+                </van-grid-item>
+                <van-grid-item>
+                    <span class="count">{{user.art_count}}</span>
+                    <span class="text">粉丝</span>
+                </van-grid-item>
+                <van-grid-item>
+                    <span class="count">{{user.art_count}}</span>
+                    <span class="text">获赞</span>
+                </van-grid-item>
+                </van-grid>
+        </van-cell-group>
+      <!-- /用户信息 -->
     <!-- 未登陆 -->
     <!-- $router.push({name:'login'})路径参数可以是对象形式 -->
-    <div class="not-login">
+    <div class="not-login" v-else>
         <div
             class="circle"
             @click="$router.push({name:'login'})"
