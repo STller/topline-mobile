@@ -26,7 +26,8 @@ import {
   Search,
   Loading,
   Dialog,
-  ActionSheet
+  ActionSheet,
+  DatetimePicker
 } from 'vant'
 // 导入样式后就全局应用了
 import './styles/index.css'
@@ -81,6 +82,7 @@ Vue
   .use(Loading)
   .use(Dialog)
   .use(ActionSheet)
+  .use(DatetimePicker)
 /**
  *
  */

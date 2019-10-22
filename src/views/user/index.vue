@@ -24,7 +24,12 @@
         is-link
         @click="isEditGenderShow = !isEditGenderShow"
       ></van-cell>
-      <van-cell title="生日" :value="user.birthday" is-link></van-cell>
+      <van-cell
+        title="生日"
+        :value="user.birthday"
+        is-link
+        @click="isEditBirthdayShow = !isEditBirthdayShow"
+        ></van-cell>
     </van-cell-group>
     <!-- 默认隐藏的文件选择 -->
     <input type="file" hidden ref="file" @change="onFileChange" />
@@ -47,11 +52,24 @@
       @select="onSelect"
     />
     <!-- /编辑用户昵称上拉菜单 -->
+    <!-- 编辑用户生日 -->
+    <van-popup
+      v-model="isEditBirthdayShow"
+      position="bottom"
+      :style="{height:'30%'}"
+      >
+      <van-datetime-picker
+      type="date"
+      @confirm="onUserBirthdayConfirm"
+      @cancel="isEditBirthdayShow = false"/>
+      </van-popup>
+    <!-- /编辑用户生日 -->
   </div>
 </template>
 
 <script>
-import { getProfile, updateUserPhoto } from '@/api/user'
+import { getProfile, updateUserPhoto, updateUserProfile } from '@/api/user'
+import dayjs from 'dayjs'
 export default {
   name: 'UserIndex',
   data () {
@@ -64,7 +82,8 @@ export default {
         // 性别上拉菜单的数据
         { name: '男', value: 0 },
         { name: '女', value: 1 }
-      ]
+      ],
+      isEditBirthdayShow: false // 编辑生日弹窗是否显示
     }
   },
   created () {
@@ -108,9 +127,20 @@ export default {
         message: '保存中' // 文本类型
       })
       try {
-        const formData = new FormData()
-        formData.append('photo', this.$refs.file.files[0])
-        await updateUserPhoto(formData)
+        const fileObj = this.$refs.file.files[0]
+        // 如果用户选择了新的头像 更新用户头像
+        if (fileObj) {
+          const formData = new FormData()
+          formData.append('photo', fileObj)
+          // 先上传新的头像
+          await updateUserPhoto(formData)
+        }
+        // 更新用户其他的文本信息
+        await updateUserProfile({
+          name: this.user.name,
+          gender: this.user.gender,
+          birthday: this.user.birthday
+        })
         this.$toast.success('保存成功')
       } catch (error) {
         console.log(error)
@@ -137,6 +167,13 @@ export default {
       this.user.gender = item.value
       // 关闭性别上拉弹窗
       this.isEditGenderShow = false
+    },
+    /**
+     * 生日选择
+     */
+    onUserBirthdayConfirm (value) {
+      this.user.birthday = dayjs(value).format('YYYY-MM-DD')
+      this.isEditBirthdayShow = false
     }
   }
 }
