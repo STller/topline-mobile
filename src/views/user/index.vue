@@ -1,42 +1,52 @@
 <template>
   <div>
-      <van-nav-bar
-        title="个人信息"
-        left-arrow
-        @click-left="$router.back()"
-        right-text="保存"
-        @click-right="onSave"
-        ></van-nav-bar>
-        <van-cell-group>
-          <!-- 点击头像切换头像 -->
-            <van-cell
-              title="头像"
-              @click="onChangePhoto">
-                <van-image
-                    round
-                    width="30"
-                    height="30"
-                    :src="user.photo"></van-image>
-            </van-cell>
-            <van-cell
-                title="昵称"
-                :value="user.name"
-                is-link></van-cell>
-            <van-cell
-                title="性别"
-                :value="user.gender === 0 ? '男' : '女' "
-                is-link></van-cell>
-            <van-cell
-                title="生日"
-                :value="user.birthday"
-                is-link></van-cell>
-        </van-cell-group>
-        <!-- 默认隐藏的文件选择 -->
-        <input
-          type="file"
-          hidden
-          ref="file"
-          @change="onFileChange">
+    <van-nav-bar
+      title="个人信息"
+      left-arrow
+      @click-left="$router.back()"
+      right-text="保存"
+      @click-right="onSave"
+    ></van-nav-bar>
+    <van-cell-group>
+      <!-- 点击头像切换头像 -->
+      <van-cell title="头像" @click="onChangePhoto">
+        <van-image round width="30" height="30" :src="user.photo"></van-image>
+      </van-cell>
+      <van-cell
+        title="昵称"
+        :value="user.name"
+        is-link
+        @click="isEditNameShow = !isEditNameShow"
+      ></van-cell>
+      <van-cell
+        title="性别"
+        :value="user.gender === 0 ? '男' : '女' "
+        is-link
+        @click="isEditGenderShow = !isEditGenderShow"
+      ></van-cell>
+      <van-cell title="生日" :value="user.birthday" is-link></van-cell>
+    </van-cell-group>
+    <!-- 默认隐藏的文件选择 -->
+    <input type="file" hidden ref="file" @change="onFileChange" />
+    <!-- /默认隐藏的文件选择 -->
+    <!-- 编辑用户昵称弹窗 -->
+    <van-dialog
+      v-model="isEditNameShow"
+      title="用户昵称"
+      show-cancel-button
+      @confirm="onUserNameConfirm"
+    >
+      <van-field placeholder="请输入用户名" :value="user.name" @input="onUserNameInput" />
+    </van-dialog>
+    <!-- /编辑用户昵称弹窗 -->
+    <!-- 编辑用户昵称上拉菜单 -->
+    <van-action-sheet
+      v-model="isEditGenderShow"
+      :actions="actions"
+      cancel-text="取消"
+      @select="onSelect"
+    />
+    <!-- /编辑用户昵称上拉菜单 -->
   </div>
 </template>
 
@@ -46,7 +56,15 @@ export default {
   name: 'UserIndex',
   data () {
     return {
-      user: {}
+      user: {},
+      isEditNameShow: false, // 编辑昵称弹窗是否显示
+      inputUserName: '', // 存储编辑用户数据的输入框数据
+      isEditGenderShow: false, // 编辑性别弹窗是否显示
+      actions: [
+        // 性别上拉菜单的数据
+        { name: '男', value: 0 },
+        { name: '女', value: 1 }
+      ]
     }
   },
   created () {
@@ -72,7 +90,7 @@ export default {
       this.$refs.file.click()
     },
     /*
-    * 在选择头像之后 file发生改变
+     * 在选择头像之后 file发生改变
      */
     onFileChange () {
       console.log(this.$refs.file.files)
@@ -98,11 +116,31 @@ export default {
         console.log(error)
         this.$toast.fail('保存失败')
       }
+    },
+    /**
+     *输入新的昵称后确认输入
+     */
+    onUserNameConfirm () {
+      this.user.name = this.inputUserName
+    },
+    /**
+     * 正在输入新的昵称
+     */
+    onUserNameInput (value) {
+      this.inputUserName = value
+    },
+    /**
+     * 性别的弹窗选择
+     */
+    onSelect (item) {
+      // 修改user中的数据
+      this.user.gender = item.value
+      // 关闭性别上拉弹窗
+      this.isEditGenderShow = false
     }
   }
 }
 </script>
 
 <style>
-
 </style>

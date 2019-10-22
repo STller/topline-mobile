@@ -24,7 +24,9 @@ import {
   Lazyload,
   Popup,
   Search,
-  Loading
+  Loading,
+  Dialog,
+  ActionSheet
 } from 'vant'
 // 导入样式后就全局应用了
 import './styles/index.css'
@@ -77,6 +79,8 @@ Vue
   .use(Popup)
   .use(Search)
   .use(Loading)
+  .use(Dialog)
+  .use(ActionSheet)
 /**
  *
  */
