@@ -33,11 +33,20 @@ export function unFollowUser (userId) {
   })
 }
 /**
- * 获取用户的个人信息
+ * 获取用户自己的信息
  */
 export function getSelf (userId) {
   return request({
     method: 'get',
     url: '/app/v1_0/user'
+  })
+}
+/**
+ * 获取用户个人资料
+ */
+export function getProfile () {
+  return request({
+    method: 'get',
+    url: '/app/v1_0/user/profile'
   })
 }
