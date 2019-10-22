@@ -50,3 +50,13 @@ export function getProfile () {
     url: '/app/v1_0/user/profile'
   })
 }
+/**
+ * 更新用户头像
+ */
+export function updateUserPhoto (data) {
+  return request({
+    method: 'patch',
+    url: '/app/v1_0/user/photo',
+    data
+  })
+}
