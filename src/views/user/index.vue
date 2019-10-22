@@ -44,14 +44,14 @@
       <van-field placeholder="请输入用户名" :value="user.name" @input="onUserNameInput" />
     </van-dialog>
     <!-- /编辑用户昵称弹窗 -->
-    <!-- 编辑用户昵称上拉菜单 -->
+    <!-- 编辑用户性别上拉菜单 -->
     <van-action-sheet
       v-model="isEditGenderShow"
       :actions="actions"
       cancel-text="取消"
       @select="onSelect"
     />
-    <!-- /编辑用户昵称上拉菜单 -->
+    <!-- /编辑用户性别上拉菜单 -->
     <!-- 编辑用户生日 -->
     <van-popup
       v-model="isEditBirthdayShow"
